@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.007_000;
+our $VERSION = 0.008_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -31,9 +31,9 @@ print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling eval 'use CPAN; 1;
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
         use CPAN;
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, about to call CPAN o conf defaults...}, "\n\n";
-        CPAN::Shell->o('conf defaults');
+        CPAN::Shell->o('conf', 'defaults');
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, about to call CPAN o conf commit...}, "\n\n";
-        CPAN::Shell->o('conf commit');
+        CPAN::Shell->o('conf', 'commit');
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, about to call CPAN to install Alien::PCRE2...}, "\n\n";
         CPAN::Shell->install('Alien::PCRE2');
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, returned from call CPAN to install Alien::PCRE2}, "\n\n";
