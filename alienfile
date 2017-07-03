@@ -1,6 +1,10 @@
 use alienfile;
 
-our $VERSION = 0.003_000;
+our $VERSION = 0.004_000;
+
+configure {
+    requires 'Alien::PCRE2' => '0.006';
+};
 
 use Alien::PCRE2;
 my $pcre2_dist_dir = Alien::PCRE2->dist_dir();
