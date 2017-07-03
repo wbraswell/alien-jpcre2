@@ -1,5 +1,5 @@
 language: perl
-# v0.002_000
+# v0.003_000
 
 # NEED FIX, CORRELATION #ap010: old version of Travis build OS does not support apt-get installation of libpcre2* ???
 #addons:
@@ -40,6 +40,10 @@ before_install:
 #    - build-dist
 #    - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
 # [ END Travis-CI Helper ]
+
+    # legacy Travis-CI stack, currently enabled, supports sudo & update-alternatives
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get update -qq
 
 install:
     - sudo apt-get install -qq g++-4.8
