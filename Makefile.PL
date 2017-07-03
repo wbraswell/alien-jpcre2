@@ -46,6 +46,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
             die 'ERROR EAJ00: Alien::PCRE2 and cpanm are not installed, can not automatically install Alien::PCRE2 for use in alienfile, please manually install Alien::PCRE2, dying';
         }
 
+        use Capture::Tiny qw( capture_merged );
         # run `cpanm Alien::PCRE2`, check for valid output
         my $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' Alien::PCRE2'; }];
         print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output =', Dumper($cpanm_output), "\n\n";
