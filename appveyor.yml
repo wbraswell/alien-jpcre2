@@ -1,4 +1,4 @@
-# v0.001_000
+# v0.002_000
 version: 1.0.{build}
 pull_requests:
   do_not_increment_build_number: false
@@ -38,8 +38,6 @@ install:
 
     perl -V
 
-    perl -e"require CPAN;CPAN::Shell->verbose('install','App::cpanminus');"
-
     echo pre-gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
 
     set ALIEN_INSTALL_TYPE_TMP=%ALIEN_INSTALL_TYPE%
@@ -60,10 +58,6 @@ install:
 
     cpanm --verbose --notest Alien::Build
 
-    perl Makefile.PL
-
-    cpanm --verbose --installdeps .
-
     set PERL5LIB=blib;lib
 
     set MAKE=gmake
@@ -73,6 +67,10 @@ install:
     set
 
     perl -le "print for @INC"
+
+    perl Makefile.PL
+
+    cpanm --verbose --installdeps .
 
     dmake
 
