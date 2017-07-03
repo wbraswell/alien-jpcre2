@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.004_000;
+our $VERSION = 0.005_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -15,6 +15,17 @@ BEGIN {
     use File::Path qw(remove_tree);
     my $removed_count = remove_tree('_alien');
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling remove_tree('_alien'), have $removed_count = }, $removed_count, "\n\n";
+
+    # install Alien::PCRE2 if not already present, must be done here rather than in CONFIGURE_REQUIRES section below or "configure requires" section of alienfile,
+    # otherwise Alien::PCRE2 will not be installed early enough to be used in the alienfile itself
+    my $eval_retval = eval { use Alien::PCRE2; 1; };
+    if (not defined $eval_retval) {  # runtime error occurred
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling eval { use Alien::PCRE2; }, have $EVAL_ERROR = '}, $EVAL_ERROR, q{'}, "\n\n";
+        use CPAN;
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, about to call CPAN to install Alien::PCRE2...}, "\n\n";
+        CPAN::Shell->install("Alien::PCRE2");
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, returned from call CPAN to install Alien::PCRE2}, "\n\n";
+    }
 }
 
 # fix read-only blib/lib in MS Windows
@@ -39,6 +50,7 @@ WriteMakefile($abmm->mm_args(
         'IO::Socket::SSL'       => '2.043',
         'Alien::Build'          => '0.52',  # provides Alien::Build::MM
 #        'Alien::PCRE2'          => '0.006',  NEED REMOVE: moved to alienfile
+        'CPAN'                  => '2'
     },
 
     META_MERGE => {
