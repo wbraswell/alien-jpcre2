@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.005_000;
+our $VERSION = 0.006_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -18,13 +18,25 @@ print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling remove_tree('_alie
 
     # install Alien::PCRE2 if not already present, must be done here rather than in CONFIGURE_REQUIRES section below or "configure requires" section of alienfile,
     # otherwise Alien::PCRE2 will not be installed early enough to be used in the alienfile itself
-    my $eval_retval = eval ' use Alien::PCRE2; 1; ';
-    if (not defined $eval_retval) {  # runtime error occurred
-print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling eval { use Alien::PCRE2; }, have $EVAL_ERROR = '}, $EVAL_ERROR, q{'}, "\n\n";
+    my $eval_retval = eval 'use Alien::PCRE2; 1;';
+    if (not defined $eval_retval) {  # runtime error occurred, Alien::PCRE2 presumably not installed
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling eval 'use Alien::PCRE2; 1;', have $EVAL_ERROR = '}, $EVAL_ERROR, q{'}, "\n\n";
+        $eval_retval = eval 'use CPAN; 1;';
+        if (not defined $eval_retval) {  # runtime error occurred, CPAN presumably not installed
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling eval 'use CPAN; 1;', have $EVAL_ERROR = '}, $EVAL_ERROR, q{'}, "\n\n";
+            die 'ERROR EAP00: Alien::PCRE2 and CPAN distributions are not installed, can not automatically install Alien::PCRE2 for use in alienfile, please manually install Alien::PCRE2, dying';
+        }
+        use Cwd;
+        my $pre_cpan_dir = getcwd();
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
         use CPAN;
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, about to call CPAN to install Alien::PCRE2...}, "\n\n";
         CPAN::Shell->install("Alien::PCRE2");
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, returned from call CPAN to install Alien::PCRE2}, "\n\n";
+        my $post_cpan_dir = getcwd();
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, have $post_cpan_dir = '}, $post_cpan_dir, q{'}, "\n\n";
+        chdir $pre_cpan_dir;
+print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after chdir, have getcwd() = '}, getcwd(), q{'}, "\n\n";
     }
 }
 
