@@ -18,7 +18,7 @@ print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling remove_tree('_alie
 
     # install Alien::PCRE2 if not already present, must be done here rather than in CONFIGURE_REQUIRES section below or "configure requires" section of alienfile,
     # otherwise Alien::PCRE2 will not be installed early enough to be used in the alienfile itself
-    my $eval_retval = eval { use Alien::PCRE2; 1; };
+    my $eval_retval = eval ' use Alien::PCRE2; 1; ';
     if (not defined $eval_retval) {  # runtime error occurred
 print {*STDERR} q{<<< DEBUG >>> In Makefile.PL, after calling eval { use Alien::PCRE2; }, have $EVAL_ERROR = '}, $EVAL_ERROR, q{'}, "\n\n";
         use CPAN;
