@@ -1,0 +1,91 @@
+# v0.001_000
+version: 1.0.{build}
+pull_requests:
+  do_not_increment_build_number: false
+skip_tags: true
+clone_depth: 1
+clone_folder: C:\projects\alien-jpcre2
+
+environment:
+    matrix:
+        # share test, compile JPCRE2 from source
+        - ALIEN_INSTALL_TYPE: share
+
+# NEED FIX, CORRELATION #aj010: chocolatey does not support installation of libjpcre2*
+       # system test, uses JPCRE2 from chocolatey
+#        - ALIEN_INSTALL_TYPE: system
+
+# DEV NOTE, CORRELATION #aj001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 
+# DEV NOTE: do not test IO::Socket::SSL, about 50% of the time it hangs on the test after "t/sysread_write.t ................. ok"
+# DEV NOTE, CORRELATION #aj003: must set env var MAKE=gmake to change Alien::Build process, does not work to set it in Makefile.PL
+# DEV NOTE, CORRELATION #aj004: must set env var PATH with C:\Progra~1\ instead of C:\Program Files\ to avoid error "file not found C:\Program" in Alien::Build process
+install:
+- cmd: >-
+
+    choco install curl
+
+    curl -V
+
+    curl -o perl.msi http://strawberryperl.com/download/5.24.0.1/strawberry-perl-5.24.0.1-32bit.msi
+
+    msiexec /i perl.msi /quiet /qn /norestart
+
+    set PATH=C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin;C:\windows\system32;C:\windows;%path%
+
+    gcc -v
+
+    g++ -v
+
+    perl -V
+
+    perl -e"require CPAN;CPAN::Shell->verbose('install','App::cpanminus');"
+
+    echo pre-gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
+
+    set ALIEN_INSTALL_TYPE_TMP=%ALIEN_INSTALL_TYPE%
+
+    set ALIEN_INSTALL_TYPE=system
+
+    echo gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
+
+    cpanm --verbose Alien::MSYS
+
+    cpanm --verbose Alien::gmake
+
+    set ALIEN_INSTALL_TYPE=%ALIEN_INSTALL_TYPE_TMP%
+
+    echo post-gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
+
+    cpanm --verbose --notest IO::Socket::SSL
+
+    cpanm --verbose --notest Alien::Build
+
+    perl Makefile.PL
+
+    cpanm --verbose --installdeps .
+
+    set PERL5LIB=blib;lib
+
+    set MAKE=gmake
+
+    set PATH=C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin;C:\windows\system32;C:\windows;C:\Perl\site\bin;C:\Perl\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Progra~1\7-Zip;C:\Progra~1\Microsoft\Web Platform Installer\;C:\Tools\GitVersion;C:\Tools\PsTools;C:\Progra~1\Git LFS;C:\Progra~2\Subversion\bin;C:\Progra~1\Microsoft SQL Server\120\Tools\Binn\;C:\Progra~1\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Progra~2\Microsoft SQL Server\120\Tools\Binn\;C:\Progra~1\Microsoft SQL Server\120\DTS\Binn\;C:\Progra~2\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Tools\WebDriver;C:\Progra~2\Microsoft SDKs\TypeScript\1.4\;C:\Progra~2\Microsoft Visual Studio 12.0\Common7\IDE\PrivateAssemblies\;C:\Progra~2\Microsoft SDKs\Azure\CLI\wbin;C:\Ruby193\bin;C:\Tools\NUnit\bin;C:\Tools\xUnit;C:\Tools\MSpec;C:\Tools\Coverity\bin;C:\Progra~2\CMake\bin;C:\go\bin;C:\Progra~1\Java\jdk1.8.0\bin;C:\Python27;C:\Progra~1\nodejs;C:\Progra~2\iojs;C:\Progra~1\iojs;C:\Users\appveyor\AppData\Roaming\npm;C:\Progra~1\Microsoft SQL Server\130\Tools\Binn\;C:\Progra~2\MSBuild\14.0\Bin;C:\Tools\NuGet;C:\Progra~2\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Progra~1\Microsoft DNX\Dnvm;C:\Progra~1\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Progra~2\Microsoft SQL Server\130\Tools\Binn\;C:\Progra~2\Microsoft SQL Server\130\DTS\Binn\;C:\Progra~1\Microsoft SQL Server\130\DTS\Binn\;C:\Progra~2\Microsoft SQL Server\110\DTS\Binn\;C:\Progra~2\Microsoft SQL Server\120\DTS\Binn\;C:\Progra~2\Apache\Maven\bin;C:\Python27\Scripts;C:\Tools\NUnit3;C:\Progra~1\Mercurial\;C:\Progra~1\LLVM\bin;C:\Progra~1\dotnet\;C:\Progra~1\erl8.3\bin;C:\Tools\curl\bin;C:\Progra~1\Amazon\AWSCLI\;C:\Progra~1\Git\cmd;C:\Progra~1\Git\usr\bin;C:\Progra~2\Microsoft SQL Server\140\DTS\Binn\;C:\Progra~2\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\140;C:\ProgramData\chocolatey\bin;C:\Progra~2\nodejs\;C:\Progra~2\Yarn\bin;C:\Progra~1\Microsoft Service Fabric\bin\Fabric\Fabric.Code;C:\Progra~1\Microsoft SDKs\Service Fabric\Tools\ServiceFabricLocalClusterManager;C:\Users\appveyor\AppData\Roaming\npm;C:\Users\appveyor\AppData\Local\Yarn\bin;C:\Progra~1\AppVeyor\BuildAgent\
+
+    set
+
+    perl -le "print for @INC"
+
+    dmake
+
+    dmake test
+
+    dmake install
+
+    perl -le "use Alien::JPCRE2; use Env qw(@PATH); unshift @PATH, Alien::JPCRE2->bin_dir(); print q{have Alien::JPCRE2->dist_dir() = }, Alien::JPCRE2->dist_dir(), \"\n\";"
+
+    dir /S /W C:\projects\ALIEN-~1\blib\lib\auto\share\dist\ALIEN-~1\bin
+
+    dir /S /W C:\STRAWB~1\perl\site\lib\auto\share\dist\Alien-PCRE2\bin
+
+build: off
+test: off
+deploy: off
