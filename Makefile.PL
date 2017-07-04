@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.032_000;
+our $VERSION = 0.034_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -19,12 +19,13 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling remove_tree('_alie
 
 #=begin DISABLED_PCRE2_KLUDGE
 
-    # DEV NOTE, CORRELATION #aj00: DOES work here, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
+    # DEV NOTE, CORRELATION #aj00: DOES work here FOR NON-WINDOWS ONLY SO FAR, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
     # install Alien::PCRE2 if not already present, must be done here rather than in CONFIGURE_REQUIRES section below or "configure requires" section of alienfile,
     # otherwise Alien::PCRE2 will not be installed early enough to be used in the alienfile itself
     my $eval_retval = eval 'use Alien::PCRE2; 1;';
     if (not defined $eval_retval) {  # runtime error occurred, Alien::PCRE2 presumably not installed
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling eval 'use Alien::PCRE2; 1;', have $EVAL_ERROR = '}, $EVAL_ERROR, q{'}, "\n\n";
+print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, attempting to install Alien::PCRE2 via cpanm...}, "\n\n";
 
 =begin DISABLED_CPAN
 
@@ -103,6 +104,9 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $post_cpan_dir = '}, $post_
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after chdir, have getcwd() = '}, getcwd(), q{'}, "\n\n";
 
     }
+    else {
+print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, NOT attempting to install Alien::PCRE2 via cpanm, it is already installed!  :-)}, "\n\n";
+    }
 
 #=end DISABLED_PCRE2_KLUDGE
 
@@ -131,7 +135,7 @@ WriteMakefile($abmm->mm_args(
         # DEV NOTE, CORRELATION #ap001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 
         'IO::Socket::SSL'       => '2.043',
         'Alien::Build'          => '0.52',  # provides Alien::Build::MM
-#        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: does not work here, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
+        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
         'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
     },
 
