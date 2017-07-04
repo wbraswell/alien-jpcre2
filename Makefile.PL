@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.018_000;
+our $VERSION = 0.019_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -54,11 +54,12 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
 
         use Capture::Tiny qw( capture_merged );
         # run `cpanm Alien::PCRE2`, check for valid output
+        my $cpanm_output;
         if ( $OSNAME eq 'MSWin32' ) { 
-            my $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake; ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake; ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
         }
         else {
-            my $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
         }
 print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output =', Dumper($cpanm_output), "\n\n";
         my $cpanm_output_success = 0;
