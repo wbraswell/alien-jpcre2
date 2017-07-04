@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.017_000;
+our $VERSION = 0.018_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -11,7 +11,6 @@ BEGIN {
     use Config;
     use English qw(-no_match_vars);  # for $OSNAME
     use Data::Dumper;  # DEBUG
-    use Env qw(@PATH);
 
     # remove previous Alien build directory, ensure only one build process to be found by t/02_make_check.t
     use File::Path qw(remove_tree);
@@ -41,10 +40,11 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling eval 'use CPAN; 1;
         my $pre_cpan_dir = getcwd();
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
 
+        # NEED REMOVE IF NOT SETTING ENV VAR PROPERLY!!!
+#        use Env qw();
+#        if ( $OSNAME eq 'MSWin32' ) { $ENV{'MAKE'} = 'gmake'; }
+
         # use cpanm to install Alien::PCRE2
-        if ( $OSNAME eq 'MSWin32' ) {
-            $ENV{'MAKE'} = 'gmake';
-        }
         use IPC::Cmd qw(can_run);
         my $cpanm_path = can_run('cpanm');
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_path, q{'}, "\n\n";
@@ -54,7 +54,12 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
 
         use Capture::Tiny qw( capture_merged );
         # run `cpanm Alien::PCRE2`, check for valid output
-        my $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
+        if ( $OSNAME eq 'MSWin32' ) { 
+            my $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake; ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
+        }
+        else {
+            my $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
+        }
 print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output =', Dumper($cpanm_output), "\n\n";
         my $cpanm_output_success = 0;
         foreach my $cpanm_output_line (@{$cpanm_output}) {
