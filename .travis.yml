@@ -1,5 +1,5 @@
 language: perl
-# v0.007_000
+# v0.008_000
 
 # NEED FIX, CORRELATION #ap010: old version of Travis build OS does not support apt-get installation of libpcre2* ???
 #addons:
@@ -31,7 +31,9 @@ matrix:
     allow_failures:
         # NEED FIX: why is File::Find::Rule from t/02_make_check.t failing in v5.25 and v5.27 only?!?
 #        - perl: "blead"
-        - perl: "5.25" "5.27" "blead"
+        - perl: "5.25"
+        - perl: "5.27"
+        - perl: "blead"
 before_install:
     - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
     - source ~/travis-perl-helpers/init
