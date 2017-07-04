@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.019_000;
+our $VERSION = 0.022_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -17,7 +17,9 @@ BEGIN {
     my $removed_count = remove_tree('_alien');
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling remove_tree('_alien'), have $removed_count = }, $removed_count, "\n\n";
 
-    # DEV NOTE, CORRELATION #aj00: does not work here, must be installed in Makefile.PL BEGIN block
+#=begin DISABLED_PCRE2_KLUDGE
+
+    # DEV NOTE, CORRELATION #aj00: DOES work here, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
     # install Alien::PCRE2 if not already present, must be done here rather than in CONFIGURE_REQUIRES section below or "configure requires" section of alienfile,
     # otherwise Alien::PCRE2 will not be installed early enough to be used in the alienfile itself
     my $eval_retval = eval 'use Alien::PCRE2; 1;';
@@ -41,8 +43,9 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling eval 'use CPAN; 1;
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
 
         # NEED REMOVE IF NOT SETTING ENV VAR PROPERLY!!!
-#        use Env qw();
-#        if ( $OSNAME eq 'MSWin32' ) { $ENV{'MAKE'} = 'gmake'; }
+        use Env;
+        if ( $OSNAME eq 'MSWin32' ) { $ENV{'MAKE'} = 'gmake'; }
+print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have %ENV = }, Dumper(\%ENV), "\n\n";
 
         # use cpanm to install Alien::PCRE2
         use IPC::Cmd qw(can_run);
@@ -56,7 +59,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
         # run `cpanm Alien::PCRE2`, check for valid output
         my $cpanm_output;
         if ( $OSNAME eq 'MSWin32' ) { 
-            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake; ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake && ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
         }
         else {
             $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
@@ -77,7 +80,7 @@ print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output_line S
 
 =begin DISABLED_CPAN
 
-        # DISABLED: use cpan to install Alien::PCRE2, keeps getting stuck at interactive configuration
+        # DISABLED: use cpanm to install Alien::PCRE2, because cpan keeps getting stuck at interactive configuration
         use CPAN;
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, about to call CPAN o conf defaults...}, "\n\n";
         CPAN::Shell->o('conf', 'defaults');
@@ -87,7 +90,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, about to call CPAN to install Al
         CPAN::Shell->install('Alien::PCRE2');
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, returned from call CPAN to install Alien::PCRE2}, "\n\n";
 
-=end DISABLED
+=end DISABLED_CPAN
 
 =cut
 
@@ -96,8 +99,12 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $post_cpan_dir = '}, $post_
         chdir $pre_cpan_dir;
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after chdir, have getcwd() = '}, getcwd(), q{'}, "\n\n";
 
-
     }
+
+#=end DISABLED_PCRE2_KLUDGE
+
+#=cut
+
 }
 
 # fix read-only blib/lib in MS Windows
@@ -121,7 +128,7 @@ WriteMakefile($abmm->mm_args(
         # DEV NOTE, CORRELATION #ap001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 
         'IO::Socket::SSL'       => '2.043',
         'Alien::Build'          => '0.52',  # provides Alien::Build::MM
-#        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: does not work here, must be installed in Makefile.PL BEGIN block
+#        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: does not work here, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
         'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
     },
 

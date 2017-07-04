@@ -1,8 +1,8 @@
 use alienfile;
 
-our $VERSION = 0.004_000;
+our $VERSION = 0.006_000;
 
-# DEV NOTE, CORRELATION #aj00: does not work here, must be installed in Makefile.PL BEGIN block
+# DEV NOTE, CORRELATION #aj00: does not work here, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
 #configure {
 #    requires 'Alien::PCRE2' => '0.006';
 #};
@@ -14,6 +14,7 @@ print {*STDERR} "\n\n", q{<<< DEBUG >>> in alienfile, have $pcre2_dist_dir = '},
 plugin 'PkgConfig' => 'libjpcre2';
  
 share {
+#    requires 'Alien::PCRE2' => '0.006';  # DEV NOTE, CORRELATION #aj00: does not work here, Alien::PCRE2 must be installed in Makefile.PL BEGIN block
     plugin Download => (
         url => 'https://wbraswell.github.io/jpcre2-mirror/',
         filter => qr/^jpcre2-.*\.tar\.gz$/,
