@@ -2,7 +2,7 @@ use alienfile;
 
 our $VERSION = 0.004_000;
 
-# NEED REMOVE: moved to Makefile.PL BEGIN block
+# DEV NOTE, CORRELATION #aj00: does not work here, must be installed in Makefile.PL BEGIN block
 #configure {
 #    requires 'Alien::PCRE2' => '0.006';
 #};

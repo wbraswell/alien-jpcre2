@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.013_000;
+our $VERSION = 0.017_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -11,12 +11,14 @@ BEGIN {
     use Config;
     use English qw(-no_match_vars);  # for $OSNAME
     use Data::Dumper;  # DEBUG
+    use Env qw(@PATH);
 
     # remove previous Alien build directory, ensure only one build process to be found by t/02_make_check.t
     use File::Path qw(remove_tree);
     my $removed_count = remove_tree('_alien');
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling remove_tree('_alien'), have $removed_count = }, $removed_count, "\n\n";
 
+    # DEV NOTE, CORRELATION #aj00: does not work here, must be installed in Makefile.PL BEGIN block
     # install Alien::PCRE2 if not already present, must be done here rather than in CONFIGURE_REQUIRES section below or "configure requires" section of alienfile,
     # otherwise Alien::PCRE2 will not be installed early enough to be used in the alienfile itself
     my $eval_retval = eval 'use Alien::PCRE2; 1;';
@@ -40,6 +42,9 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling eval 'use CPAN; 1;
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
 
         # use cpanm to install Alien::PCRE2
+        if ( $OSNAME eq 'MSWin32' ) {
+            $ENV{'MAKE'} = 'gmake';
+        }
         use IPC::Cmd qw(can_run);
         my $cpanm_path = can_run('cpanm');
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_path, q{'}, "\n\n";
@@ -110,8 +115,8 @@ WriteMakefile($abmm->mm_args(
         # DEV NOTE, CORRELATION #ap001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 
         'IO::Socket::SSL'       => '2.043',
         'Alien::Build'          => '0.52',  # provides Alien::Build::MM
-#        'Alien::PCRE2'          => '0.006',  NEED REMOVE: moved to alienfile
-        'CPAN'                  => '2'
+#        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: does not work here, must be installed in Makefile.PL BEGIN block
+        'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
     },
 
     META_MERGE => {
