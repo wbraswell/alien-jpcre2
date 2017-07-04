@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.027_000;
+our $VERSION = 0.029_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -42,12 +42,12 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling eval 'use CPAN; 1;
         my $pre_cpan_dir = getcwd();
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
 
-        # NEED REMOVE IF NOT SETTING ENV VAR PROPERLY!!!
-        use Env;
-        if ( $OSNAME eq 'MSWin32' ) {
-            $ENV{'MAKE'} = 'gmake_FROM_PERL_ENV';
-            $ENV{'HOWDY'} = 'YALL_FROM_PERL_ENV';  # NEED REMOVE, DEBUG
-        }
+        # NEED REMOVE: not needed?
+#        use Env;
+#        if ( $OSNAME eq 'MSWin32' ) {
+#            $ENV{'MAKE'} = 'gmake_FROM_PERL_ENV';
+#            $ENV{'HOWDY'} = 'YALL_FROM_PERL_ENV';  # NEED REMOVE, DEBUG
+#        }
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have %ENV = }, Dumper(\%ENV), "\n\n";
 
         # use cpanm to install Alien::PCRE2
@@ -62,7 +62,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
         # run `cpanm Alien::PCRE2`, check for valid output
         my $cpanm_output;
         if ( $OSNAME eq 'MSWin32' ) { 
-            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake&& echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system 'echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && ren C:\\strawberry\\c\\bin\\dmake.exe C:\\strawberry\\c\\bin\\dmake.exe.DISABLED && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2 && ren C:\\strawberry\\c\\bin\\dmake.exe.DISABLED C:\\strawberry\\c\\bin\\dmake.exe'; }];
         }
         else {
             $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
