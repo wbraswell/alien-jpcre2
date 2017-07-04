@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.035_000;
+our $VERSION = 0.036_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -35,13 +35,13 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling eval 'use CPAN; 1;
             die 'ERROR EAP00: Alien::PCRE2 and CPAN distributions are not installed, can not automatically install Alien::PCRE2 for use in alienfile, please manually install Alien::PCRE2, dying';
         }
 
-=end DISABLED_CPAN
-
-=cut
-
         use Cwd;
         my $pre_cpan_dir = getcwd();
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cpan_dir, q{'}, "\n\n";
+
+=end DISABLED_CPAN
+
+=cut
 
         # NEED REMOVE: not needed?
 #        use Env;
@@ -49,7 +49,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cp
 #            $ENV{'MAKE'} = 'gmake_FROM_PERL_ENV';
 #            $ENV{'HOWDY'} = 'YALL_FROM_PERL_ENV';  # NEED REMOVE, DEBUG
 #        }
-print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have %ENV = }, Dumper(\%ENV), "\n\n";
+#print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have %ENV = }, Dumper(\%ENV), "\n\n";
 
         # use cpanm to install Alien::PCRE2
         use IPC::Cmd qw(can_run);
@@ -72,7 +72,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
 print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output =', Dumper($cpanm_output), "\n\n";
         my $cpanm_output_success = 0;
         foreach my $cpanm_output_line (@{$cpanm_output}) {
-print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output_line =', $cpanm_output_line, "\n\n";
+#print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output_line =', $cpanm_output_line, "\n\n";
             if (substr($cpanm_output_line, 0, 34) eq 'Successfully installed Alien-PCRE2') {
 print {*STDERR} "\n\n", '<<< DEBUG >>> in Makefile.PL, have $cpanm_output_line SUCCESS MATCH', "\n\n";
                 $cpanm_output_success = 1;
@@ -95,14 +95,14 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, about to call CPAN to install Al
         CPAN::Shell->install('Alien::PCRE2');
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, returned from call CPAN to install Alien::PCRE2}, "\n\n";
 
-=end DISABLED_CPAN
-
-=cut
-
         my $post_cpan_dir = getcwd();
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $post_cpan_dir = '}, $post_cpan_dir, q{'}, "\n\n";
         chdir $pre_cpan_dir;
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after chdir, have getcwd() = '}, getcwd(), q{'}, "\n\n";
+
+=end DISABLED_CPAN
+
+=cut
 
     }
     else {
