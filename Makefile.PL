@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.023_000;
+our $VERSION = 0.024_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -45,8 +45,8 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $pre_cpan_dir = '}, $pre_cp
         # NEED REMOVE IF NOT SETTING ENV VAR PROPERLY!!!
         use Env;
         if ( $OSNAME eq 'MSWin32' ) {
-            $ENV{'MAKE'} = 'gmake';
-            $ENV{'HOWDY'} = 'YALL';  # NEED REMOVE, DEBUG
+            $ENV{'MAKE'} = 'gmake_FROM_PERL_ENV';
+            $ENV{'HOWDY'} = 'YALL_FROM_PERL_ENV';  # NEED REMOVE, DEBUG
         }
 print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have %ENV = }, Dumper(\%ENV), "\n\n";
 
@@ -62,7 +62,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
         # run `cpanm Alien::PCRE2`, check for valid output
         my $cpanm_output;
         if ( $OSNAME eq 'MSWin32' ) { 
-            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake_FROM_PERL_SET && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
         }
         else {
             $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
