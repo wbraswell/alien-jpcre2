@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.034_000;
+our $VERSION = 0.035_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -63,7 +63,8 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
         # run `cpanm Alien::PCRE2`, check for valid output
         my $cpanm_output;
         if ( $OSNAME eq 'MSWin32' ) { 
-            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set HOWDY=YALL_FROM_SYSTEM && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && rename C:\strawberry\c\bin\dmake.exe Ddmake.exe && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2 && rename C:\strawberry\c\bin\Ddmake.exe dmake.exe'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake&& set MAKE_FROM=MAKEFILE_PL_SYSTEM && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL  echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2'; }];
+#            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set MAKE=gmake&& set MAKE_FROM=MAKEFILE_PL_SYSTEM && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && rename C:\strawberry\c\bin\dmake.exe Ddmake.exe && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2 && rename C:\strawberry\c\bin\Ddmake.exe dmake.exe'; }];
         }
         else {
             $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
@@ -129,7 +130,8 @@ WriteMakefile($abmm->mm_args(
     AUTHOR           => 'Will Braswell <wbraswell@cpan.org>',
     LICENSE          => 'perl_5',
 #    EXE_FILES        => ['bin/foo'],  # error, no rule to make target 'bin/foo'
-#    MAKE             => 'gmake',
+    MAKE             => 'gmake',
+    MAKE_FROM        => 'MAKEFILE_PL_WRITEMAKEFILE',
 
     CONFIGURE_REQUIRES => {
         # DEV NOTE, CORRELATION #ap001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 

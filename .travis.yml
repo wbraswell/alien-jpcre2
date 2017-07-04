@@ -29,7 +29,7 @@ perl:
 # [ BEGIN Travis-CI Helper ]
 matrix:
     allow_failures:
-        # NEED FIX: why is File::Find::Rule from t/02_make_check.t failing in v5.25 and v5.27 only?!?
+        # NEED FIX, CORRELATION #aj100: why is File::Find::Rule from t/02_make_check.t failing in v5.25 and v5.27 only?!?
 #        - perl: "blead"
         - perl: "5.25"
         - perl: "5.27"
