@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.030_000;
+our $VERSION = 0.031_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -62,7 +62,7 @@ print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, have $cpanm_path = '}, $cpanm_pa
         # run `cpanm Alien::PCRE2`, check for valid output
         my $cpanm_output;
         if ( $OSNAME eq 'MSWin32' ) { 
-            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set HOWDY=YALL_FROM_SYSTEM && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && ren C:\\strawberry\\c\\bin\\dmake.exe C:\\strawberry\\c\\bin\\dmake.exe.DISABLED && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2 && ren C:\\strawberry\\c\\bin\\dmake.exe.DISABLED C:\\strawberry\\c\\bin\\dmake.exe'; }];
+            $cpanm_output = [ split /\r?\n/, capture_merged { system 'set HOWDY=YALL_FROM_SYSTEM && echo [[[ DEBUG ]]] INSIDE SYSTEM CALL && rename C:\strawberry\c\bin\dmake.exe C:\strawberry\c\bin\Ddmake.exe && echo set && set && ' . $cpanm_path . ' --verbose Alien::PCRE2 && rename C:\strawberry\c\bin\Ddmake.exe C:\strawberry\c\bin\dmake.exe'; }];
         }
         else {
             $cpanm_output = [ split /\r?\n/, capture_merged { system $cpanm_path . ' --verbose Alien::PCRE2'; }];
