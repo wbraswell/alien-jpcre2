@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.037_000;
+our $VERSION = 0.038_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -40,8 +40,12 @@ WriteMakefile($abmm->mm_args(
         'IO::Socket::SSL'       => '2.043',
         'Alien::Build'          => '0.53',  # provides Alien::Build::MM
         'Alien::Build::MM'      => '0.53',
-        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
+#        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
         'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
+    },
+
+    PREREQ_PM        => {
+        'Alien::PCRE2'          => '0.006',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
     },
 
     META_MERGE => {
