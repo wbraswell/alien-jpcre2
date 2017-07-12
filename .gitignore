@@ -9,11 +9,11 @@
 # [ CPAN Build & Distribution ]
 # NEED UPDATE, CORRELATION #aj000: list of CPAN files & directories to delete/exclude in Makefile.PL, .gitignore, and MANIFEST.SKIP
 # MANIFEST.SKIP is not auto-generated, do not exclude
-# META.* & MYMETA.* are required for build dependencies, do not exclude, git only
+# META.* are required for build dependencies, do not exclude, git only
 /MANIFEST
 /MANIFEST.bak
 #/META.*
-#/MYMETA.*
+/MYMETA.*
 /Makefile
 /Makefile.old
 /blib/
