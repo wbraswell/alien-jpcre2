@@ -32,7 +32,7 @@
       "build" : {
          "requires" : {
             "Alien::Build::MM" : "0.25",
-            "Alien::PCRE2" : "0.006",
+            "Alien::PCRE2" : "0.007",
             "Alien::gmake" : "0.11",
             "Archive::Tar" : "0",
             "Config" : "0",
@@ -50,7 +50,7 @@
          "requires" : {
             "Alien::Build" : "0.52",
             "Alien::Build::MM" : "0.25",
-            "Alien::PCRE2" : "0.006",
+            "Alien::PCRE2" : "0.007",
             "File::Find::Rule" : "0.34",
             "IO::Socket::SSL" : "2.043"
          }
