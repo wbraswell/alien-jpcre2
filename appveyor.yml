@@ -26,7 +26,6 @@ install:
 
     curl -V
 
-    #curl -o perl.msi http://strawberryperl.com/download/5.24.0.1/strawberry-perl-5.24.0.1-32bit.msi
     curl -o perl.msi http://strawberryperl.com/download/5.26.0.1/strawberry-perl-5.26.0.1-32bit.msi
 
     msiexec /i perl.msi /quiet /qn /norestart
