@@ -72,6 +72,8 @@ install:
 
     cpanm --verbose --installdeps .
 
+    set CXXFLAGS="-DJPCRE2_DISABLE_CODE_UNIT_WIDTH_VALIDATION"
+
     perl Makefile.PL
 
     gmake
