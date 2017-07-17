@@ -21,7 +21,7 @@ configure_requires:
   Alien::Build: '0.61'
   Alien::Build::MM: '0.61'
   Alien::Build::Plugin::Build::SearchDep: '0.35'
-  Alien::PCRE2: '0.008'
+  Alien::PCRE2: '0.010'
   ExtUtils::CBuilder: '0'
   File::Find::Rule: '0.34'
   IO::Socket::SSL: '2.043'
