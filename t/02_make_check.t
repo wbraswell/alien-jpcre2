@@ -23,22 +23,22 @@ SKIP: {
     # determine path for `make` command
     my $my_make_path = undef;
     if ($OSNAME eq 'MSWin32') {
-        my $dmake_path = can_run('dmake');
         my $gmake_path = can_run('gmake');
+        my $dmake_path = can_run('dmake');
         my $make_path = can_run('make');
-#print {*STDERR} "\n\n", q{<<< DEBUG >>> in 02_make_check.t, MS Windows OS, have $dmake_path = '}, $dmake_path, q{'}, "\n\n";
 #print {*STDERR} "\n\n", q{<<< DEBUG >>> in 02_make_check.t, MS Windows OS, have $gmake_path = '}, $gmake_path, q{'}, "\n\n";
+#print {*STDERR} "\n\n", q{<<< DEBUG >>> in 02_make_check.t, MS Windows OS, have $dmake_path = '}, $dmake_path, q{'}, "\n\n";
 #print {*STDERR} "\n\n", q{<<< DEBUG >>> in 02_make_check.t, MS Windows OS, have $make_path = '}, $make_path, q{'}, "\n\n";
-        if (defined $dmake_path) { 
-            $my_make_path = $dmake_path;
-        }
-        elsif (defined $gmake_path) {
+        if (defined $gmake_path) {
             $my_make_path = $gmake_path;
+        }
+        elsif (defined $dmake_path) { 
+            $my_make_path = $dmake_path;
         }
         elsif (defined $make_path) {
             $my_make_path = $make_path;
         }
-        else { die 'No dmake or gmake or make found, dying'; }
+        else { die 'No gmake or dmake or make found, dying'; }
     }
     else {
 #print {*STDERR} "\n\n", q{<<< DEBUG >>> in 02_make_check.t, real OS, using regular make}, "\n\n";
