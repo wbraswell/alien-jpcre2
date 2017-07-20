@@ -39,7 +39,7 @@ WriteMakefile($abmm->mm_args(
         'IO::Socket::SSL'       => '2.043',
         'Alien::Build'          => '0.61',  # provides Alien::Build::MM
         'Alien::Build::MM'      => '0.61',
-        'Alien::PCRE2'          => '0.010',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
+        'Alien::PCRE2'          => '0.012',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
         'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
     },
 
