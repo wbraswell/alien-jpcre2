@@ -46,17 +46,17 @@ install:
 
     echo gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
 
-    cpanm --verbose Alien::MSYS
+    cpanm Alien::MSYS
 
-    cpanm --verbose Alien::gmake
+    cpanm Alien::gmake
 
     set ALIEN_INSTALL_TYPE=%ALIEN_INSTALL_TYPE_TMP%
 
     echo post-gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
 
-    cpanm --verbose --notest IO::Socket::SSL
+    cpanm --notest IO::Socket::SSL
 
-    cpanm --verbose --notest Alien::Build
+    cpanm --notest Alien::Build
 
     set PERL5LIB=blib;lib
 
@@ -70,7 +70,9 @@ install:
 
     perl -le "print for @INC"
 
-    cpanm --verbose --installdeps .
+    cpanm --installdeps .
+
+    set CXXFLAGS=-DJPCRE2_DISABLE_CODE_UNIT_WIDTH_VALIDATION -DPCRE2_STATIC
 
     set CXXFLAGS=-DJPCRE2_DISABLE_CODE_UNIT_WIDTH_VALIDATION -DPCRE2_STATIC
 
@@ -84,9 +86,6 @@ install:
 
     perl -le "use Alien::JPCRE2; use Env qw(@PATH); unshift @PATH, Alien::JPCRE2->bin_dir(); print q{have Alien::JPCRE2->dist_dir() = }, Alien::JPCRE2->dist_dir(), \"\n\";"
 
-    dir /S /W C:\projects\ALIEN-~1\blib\lib\auto\share\dist\ALIEN-~1\bin
-
-    dir /S /W C:\STRAWB~1\perl\site\lib\auto\share\dist\Alien-PCRE2\bin
 build: off
 test: off
 deploy: off
