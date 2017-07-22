@@ -1,6 +1,6 @@
 use alienfile;
 
-our $VERSION = 0.013_000;
+our $VERSION = 0.014_000;
 
 use English qw(-no_match_vars);  # for $OSNAME
 
@@ -9,7 +9,7 @@ my $configure_cxxflags = '';
 if ($OSNAME eq 'MSWin32') {
     $configure_cxxflags = 'CXXFLAGS="%CXXFLAGS% -DPCRE2_STATIC"';
 }
-print {*STDERR} "\n\n", q{<<< DEBUG >>> in alienfile, have $configure_cxxflags = '}, $configure_cxxflags, q{'}, "\n\n";
+#print {*STDERR} "\n\n", q{<<< DEBUG >>> in alienfile, have $configure_cxxflags = '}, $configure_cxxflags, q{'}, "\n\n";
 
 plugin 'Probe::CBuilder' => (
   aliens => [ 'Alien::PCRE2' ],
