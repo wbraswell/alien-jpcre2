@@ -1,6 +1,6 @@
 use alienfile;
 
-our $VERSION = 0.010_000;
+our $VERSION = 0.011_000;
 
 plugin 'Probe::CBuilder' => (
   aliens => [ 'Alien::PCRE2' ],
@@ -23,7 +23,7 @@ share {
     );
     build [
 #        '%{configure} --enable-cpp11 --enable-test',  # DEV NOTE: disable C++11 features to support older compilers
-        '%{configure} --disable-cpp11 --enable-test CXXFLAGS=-DPCRE2_STATIC',  # DEV NOTE: Windows OS, required macro to avoid build errors
+        '%{configure} --disable-cpp11 --enable-test CXXFLAGS="$CXXFLAGS -DPCRE2_STATIC"',  # DEV NOTE: Windows OS, required macro to avoid build errors
         '%{gmake}',
         '%{gmake} check',
         '%{gmake} install',
