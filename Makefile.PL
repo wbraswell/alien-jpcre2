@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.042_000;
+our $VERSION = 0.044_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -10,11 +10,6 @@ use Alien::Build::MM;
 BEGIN { 
     use Config;
     use English qw(-no_match_vars);  # for $OSNAME
-
-    # remove previous Alien build directory, ensure only one build process to be found by t/02_make_check.t
-    use File::Path qw(remove_tree);
-    my $removed_count = remove_tree('_alien');
-print {*STDERR} q{<<< DEBUG >>> in Makefile.PL, after calling remove_tree('_alien'), have $removed_count = }, $removed_count, "\n\n";
 }
 
 # fix read-only blib/lib in MS Windows
