@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.047_000;
+our $VERSION = 0.049_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -37,13 +37,15 @@ WriteMakefile($abmm->mm_args(
     CONFIGURE_REQUIRES => {
         # DEV NOTE, CORRELATION #ap001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 
         'IO::Socket::SSL'       => '2.043',
-        'Test2::Suite'          => '0.000072',
-        'Test2::V0'             => '0.000072',  # NEED ANSWER: why is this needed if we already installed Test2::Suite???
-        'Alien::Build'          => '0.61',  # provides Alien::Build::MM
-        'Alien::Build::MM'      => '0.61',
+        'Test2::Suite'          => '0.000072',  # provides Test2::V0
+        'Alien::Build'          => '0.66',  # provides Alien::Build::MM
         'Alien::PCRE2'          => '0.012',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
         'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
         %{$configure_requires_windows}
+    },
+
+    PREREQ_PM => {
+        'Test2::Suite'          => '0.000072',  # provides Test2::V0
     },
 
     META_MERGE => {
