@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.044_000;
+our $VERSION = 0.045_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -12,9 +12,14 @@ BEGIN {
     use English qw(-no_match_vars);  # for $OSNAME
 }
 
-# fix read-only blib/lib in MS Windows
+# MS Windows OS, fix read-only blib/lib directory & enable GNU configure/make
+my $configure_requires_windows = {};
 if ( $OSNAME eq 'MSWin32' ) {
     push( @ExtUtils::MakeMaker::Overridable, qw(pm_to_blib) );
+    $configure_requires_windows = {
+        'Alien::MSYS'  => '0.08',
+        'Alien::gmake' => '0.20',
+    };
 }
 
 my $abmm = Alien::Build::MM->new;
@@ -36,6 +41,7 @@ WriteMakefile($abmm->mm_args(
         'Alien::Build::MM'      => '0.61',
         'Alien::PCRE2'          => '0.012',  # DEV NOTE, CORRELATION #aj00: NEED ANSWER, DOES THIS WORK VIA cpanm???
         'File::Find::Rule'      => '0.34',  # used to find config.status file in t/02_make_check.t
+        %{$configure_requires_windows}
     },
 
     META_MERGE => {

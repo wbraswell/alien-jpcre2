@@ -1,4 +1,4 @@
-# v0.020_000
+# v0.021_000
 version: 1.0.{build}
 pull_requests:
   do_not_increment_build_number: false
@@ -37,22 +37,6 @@ install:
     g++ -v
 
     perl -V
-
-    echo pre-gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
-
-    set ALIEN_INSTALL_TYPE_TMP=%ALIEN_INSTALL_TYPE%
-
-    set ALIEN_INSTALL_TYPE=system
-
-    echo gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
-
-    cpanm --verbose Alien::MSYS
-
-    cpanm --verbose Alien::gmake
-
-    set ALIEN_INSTALL_TYPE=%ALIEN_INSTALL_TYPE_TMP%
-
-    echo post-gmake ALIEN_INSTALL_TYPE = %ALIEN_INSTALL_TYPE%
 
     cpanm --verbose --notest IO::Socket::SSL
 
