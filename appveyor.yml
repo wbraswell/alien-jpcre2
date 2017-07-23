@@ -1,4 +1,4 @@
-# v0.021_000
+# v0.022_000
 version: 1.0.{build}
 pull_requests:
   do_not_increment_build_number: false
@@ -6,10 +6,11 @@ skip_tags: true
 clone_depth: 1
 clone_folder: C:\projects\alien-jpcre2
 
-environment:
-    matrix:
+#environment:
+#    matrix:
+# DEV NOTE, CORRELATION #aj011: hackish code, setting ALIEN_INSTALL_TYPE=share causes Alien::gmake to fail to properly install in system mode with pre-installed C:\strawberry\c\bin\gmake.exe
         # share test, compile JPCRE2 from source
-        - ALIEN_INSTALL_TYPE: share
+#        - ALIEN_INSTALL_TYPE: share
 
 # NEED FIX, CORRELATION #aj010: chocolatey does not support installation of libjpcre2*
        # system test, uses JPCRE2 from chocolatey
