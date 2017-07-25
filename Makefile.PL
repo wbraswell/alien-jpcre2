@@ -42,7 +42,7 @@ WriteMakefile($abmm->mm_args(
         %{$configure_requires_windows}
     },
 
-    PREREQ_PM => {
+    TEST_REQUIRES => {
         'Test2::Suite'          => '0.000072',  # provides Test2::V0
     },
 
