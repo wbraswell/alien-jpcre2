@@ -24,7 +24,7 @@ if ( $OSNAME eq 'MSWin32' ) {
 
 my $abmm = Alien::Build::MM->new;
 
-WriteMakefile($abmm->mm_args(
+my %WriteMakefile_args = $abmm->mm_args(
     NAME         => 'Alien::JPCRE2',
     DISTNAME     => 'Alien-JPCRE2',
     ABSTRACT     => 'Find Or Download/Build/Install libjpcre2 In JPCRE2',
@@ -69,7 +69,19 @@ WriteMakefile($abmm->mm_args(
 #            x_wiki        => "https://NONE",
         },
     },
-));
+);
+
+unless (eval { ExtUtils::MakeMaker->VERSION('6.64'); 1 }) {
+    my $test_requires = delete $WriteMakefile_args{TEST_REQUIRES};
+    my $build_requires = delete $WriteMakefile_args{BUILD_REQUIRES};
+    $WriteMakefile_args{PREREQ_PM}{$_} = $test_requires->{$_} for keys %$test_requires;
+    $WriteMakefile_args{PREREQ_PM}{$_} = $build_requires->{$_} for keys %$build_requires;
+}
+
+delete $WriteMakefile_args{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION('6.52'); 1 };
+
+WriteMakefile(%WriteMakefile_args);
 
 
 package MY;
