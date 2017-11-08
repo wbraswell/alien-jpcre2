@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.052_000;
+our $VERSION = 0.053_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -45,6 +45,10 @@ my %WriteMakefile_args = $abmm->mm_args(
     TEST_REQUIRES => {
         'Test2::Suite'          => '0.000072',  # provides Test2::V0
     },
+
+    PREREQ_PM => {
+        'Alien::PCRE2'          => '0.015',
+	},
 
     META_MERGE => {
         'meta-spec' => {
