@@ -1,8 +1,13 @@
 Revision history for Alien::JPCRE2.
 
+0.011000 2017-11-08
+
+	- Fix Bug, BSD & MacOSX, Remove Extraneous 'typename' Keywords,
+		Upgrade To JPCRE2 v10.31.03-DEV Unofficial
+
 0.010000 2017-11-08
 
-	- Fix Bug, BSD & MacOSX, Change 'std::setlocale' To 'setlocale'
+	- Fix Bug, BSD & MacOSX, Change 'std::setlocale' To 'setlocale',
 		Upgrade To JPCRE2 v10.31.02-DEV Unofficial
 	- Require Alien::PCRE2 v0.014
 

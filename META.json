@@ -85,7 +85,7 @@
       },
       "x_IRC" : "irc://irc.perl.org/#native"
    },
-   "version" : "0.010000",
+   "version" : "0.011000",
    "x_alienfile" : {
       "generated_by" : "Alien::Build::MM version 1.28",
       "requires" : {
