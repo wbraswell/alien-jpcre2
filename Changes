@@ -1,5 +1,10 @@
 Revision history for Alien::JPCRE2.
 
+0.012000 2017-11-09
+
+    - Fix Bug, Windows dmake Builds, Remove Extraneous 'gmake' Config In Makefile.PL
+	- Upgrade To JPCRE2 v10.31.02 Official
+
 0.011000 2017-11-08
 
 	- Fix Bug, BSD & MacOSX, Remove Extraneous 'typename' Keywords,

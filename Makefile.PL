@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = 0.053_000;
+our $VERSION = 0.054_000;
 
 use ExtUtils::MakeMaker;
 use Alien::Build::MM;
@@ -32,7 +32,7 @@ my %WriteMakefile_args = $abmm->mm_args(
     AUTHOR           => 'Will Braswell <wbraswell@cpan.org>',
     LICENSE          => 'perl_5',
 #    EXE_FILES        => ['bin/foo'],  # error, no rule to make target 'bin/foo'
-    MAKE             => 'gmake',
+#    MAKE             => 'gmake',  # error, causes failure to build under non-gmake such as dmake etc.
 
     CONFIGURE_REQUIRES => {
         # DEV NOTE, CORRELATION #ap001: must install IO::Socket::SSL & Alien::Build from Makefile.PL (which becomes META.json, for CPAN) & .travis.yml & appveyor.yml 
